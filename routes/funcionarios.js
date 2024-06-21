@@ -38,6 +38,22 @@ router.get('/email/:email', (req, res) => {
     });
 });
 
+router.post('/login', (req, res) => {
+    const {email, senha} = req.body;
+
+    const sql = `SELECT * FROM ${tabela} WHERE email = '${email}'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            throw err;
+        }
+        if(results[0]){
+            results[0].senha === senha ? res.send(results) : res.send({error: 'SENHA_ERRADA'})
+        } else {
+            res.send({error: 'EMAIL_NAO_ENCONTRADO'})
+        }
+    });
+})
+
 router.post('/', (req, res) => {
     const { nome,
         cpf,
